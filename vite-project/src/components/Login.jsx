@@ -23,7 +23,7 @@ const Login = () => {
     e.preventDefault();
     const result = await dispatch(login(formData));
     if (result.type === 'auth/login/fulfilled') {
-      navigate('/products');
+      navigate('/home');
     }
   };
 
