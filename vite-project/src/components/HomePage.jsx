@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import Products from './Products';
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);
@@ -23,6 +24,7 @@ const HomePage = () => {
         ) : (
           <h1 className="text-center text-xl">Please log in to see your products.</h1>
         )}
+        <Products/>
       </div>
     </div>
   );

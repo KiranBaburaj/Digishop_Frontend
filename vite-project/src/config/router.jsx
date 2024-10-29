@@ -6,6 +6,7 @@ import Login from '../components/Login';
 import Layout from '../components/Layout';
 import Register from '../components/Register';
 import HomePage from '../components/HomePage';
+import ProductDetail from '../components/ProductDetail';
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +34,16 @@ export const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <HomePage />
+          </PrivateRoute>
+        ),
+      },
+  
+
+      {
+        path: '/products/:id',
+        element: (
+          <PrivateRoute>
+           <ProductDetail />
           </PrivateRoute>
         ),
       },
