@@ -1,6 +1,7 @@
 import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import PrivateRoute from './PrivateRoute';
+import PublicRoute from './PublicRoute'; // Import the PublicRoute component
 import Login from '../components/Login';
 import Layout from '../components/Layout';
 import Register from '../components/Register';
@@ -13,18 +14,28 @@ export const router = createBrowserRouter([
     children: [
       {
         path: '/login',
-        element: <Login />,
+        element: (
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        ),
       },
       {
         path: '/register',
-        element: <Register />,
+        element: (
+          <PublicRoute>
+            <Register />
+          </PublicRoute>
+        ),
       },
       {
         path: '/home',
-        element: <HomePage />,
+        element: (
+          <PrivateRoute>
+            <HomePage />
+          </PrivateRoute>
+        ),
       },
-
-
     ],
   },
 ]);
