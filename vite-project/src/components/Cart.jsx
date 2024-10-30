@@ -2,9 +2,10 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCart } from '../store/slices/cartSlice';
+
 const Cart = () => {
   const dispatch = useDispatch();
-  const { items, loading, error } = useSelector((state) => state.cart);
+  const { items = [], loading, error } = useSelector((state) => state.cart);
 
   useEffect(() => {
     dispatch(fetchCart()); // Fetch cart items on component mount
@@ -18,11 +19,11 @@ const Cart = () => {
     return <div>Error: {error}</div>;
   }
 
-  if (items.length === 0) {
+  if (!items || items.length === 0) { // Add fallback check
     return <div>Your cart is empty.</div>;
   }
 
-  const totalPrice = items.reduce((total, item) => total + item.quantity * item.product.price, 0);
+  const totalPrice = items.reduce((total, item) => total + item.quantity * parseFloat(item.product.price), 0);
 
   return (
     <div>

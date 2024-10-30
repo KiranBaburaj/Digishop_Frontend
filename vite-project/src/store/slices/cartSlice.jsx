@@ -18,7 +18,8 @@ export const fetchCart = createAsyncThunk('cart/fetchCart', async (_, { rejectWi
         Authorization: `Bearer ${getAuthToken()}`, // Include token in the header
       },
     });
-    return response.data;
+    const cart = response.data[0]; // Assuming a single cart object
+    return cart.cart_items; // Return only the cart_items array
   } catch (error) {
     return rejectWithValue(error.response.data);
   }
@@ -27,11 +28,15 @@ export const fetchCart = createAsyncThunk('cart/fetchCart', async (_, { rejectWi
 // Thunk to add an item to the cart
 export const addToCart = createAsyncThunk('cart/addToCart', async (product, { rejectWithValue }) => {
   try {
-    const response = await axios.post(CART_ITEM_API_URL, { product_id: product.id }, {
-      headers: {
-        Authorization: `Bearer ${getAuthToken()}`, // Include token in the header
-      },
-    });
+    const response = await axios.post(
+      CART_ITEM_API_URL,
+      { product_id: product.id },
+      {
+        headers: {
+          Authorization: `Bearer ${getAuthToken()}`, // Include token in the header
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response.data);
@@ -47,7 +52,11 @@ const cartSlice = createSlice({
     error: null,
   },
   reducers: {
-    // You can add other non-async actions here if needed, e.g., clearCart
+    // Optional: clearCart to remove all items
+    clearCart: (state) => {
+      state.items = [];
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -58,7 +67,7 @@ const cartSlice = createSlice({
       })
       .addCase(fetchCart.fulfilled, (state, action) => {
         state.loading = false;
-        state.items = action.payload;
+        state.items = action.payload; // Populate cart items from payload
       })
       .addCase(fetchCart.rejected, (state, action) => {
         state.loading = false;
@@ -72,13 +81,13 @@ const cartSlice = createSlice({
       })
       .addCase(addToCart.fulfilled, (state, action) => {
         state.loading = false;
-        const item = action.payload;
-        const existingItem = state.items.find((cartItem) => cartItem.product.id === item.product.id);
+        const newItem = action.payload;
+        const existingItem = state.items.find((item) => item.product.id === newItem.product.id);
 
         if (existingItem) {
           existingItem.quantity += 1;
         } else {
-          state.items.push(item);
+          state.items.push(newItem);
         }
       })
       .addCase(addToCart.rejected, (state, action) => {
@@ -88,4 +97,5 @@ const cartSlice = createSlice({
   },
 });
 
+export const { clearCart } = cartSlice.actions; // Export clearCart if needed
 export default cartSlice.reducer;
