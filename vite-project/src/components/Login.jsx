@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../store/slices/authSlice';
 import { useNavigate, Link } from 'react-router-dom';
+import { Container, Typography, TextField, Button, CircularProgress, Box } from '@mui/material';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -28,62 +29,59 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Sign in to your account
-          </h2>
-        </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+    <Container component="main" maxWidth="xs" sx={{ mt: 8 }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Typography variant="h5" component="h1" gutterBottom>
+          Sign in to your account
+        </Typography>
+        <form onSubmit={handleSubmit} style={{ width: '100%', marginTop: '1rem' }}>
           {error && (
-            <div className="text-red-500 text-center">{error.message}</div>
+            <Typography color="error" align="center">
+              {error.message}
+            </Typography>
           )}
-          <div className="rounded-md shadow-sm -space-y-px">
-            <div>
-              <input
-                name="username"
-                type="text"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Username"
-                value={formData.username}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <input
-                name="password"
-                type="password"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Password"
-                value={formData.password}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-
-          <div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              {loading ? 'Signing in...' : 'Sign in'}
-            </button>
-          </div>
+          <TextField
+            name="username"
+            label="Username"
+            variant="outlined"
+            required
+            fullWidth
+            margin="normal"
+            value={formData.username}
+            onChange={handleChange}
+          />
+          <TextField
+            name="password"
+            label="Password"
+            type="password"
+            variant="outlined"
+            required
+            fullWidth
+            margin="normal"
+            value={formData.password}
+            onChange={handleChange}
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            disabled={loading}
+            sx={{ mt: 2 }}
+          >
+            {loading ? <CircularProgress size={24} /> : 'Sign In'}
+          </Button>
         </form>
-        <div className="text-center">
-          <p className="text-sm text-gray-600">
-            New user?{' '}
-            <Link to="/register" className="font-medium text-indigo-600 hover:text-indigo-500">
+        <Typography variant="body2" align="center" sx={{ mt: 2 }}>
+          New user?{' '}
+          <Link to="/register" style={{ textDecoration: 'none' }}>
+            <Typography color="primary" component="span">
               Register here
-            </Link>
-          </p>
-        </div>
-      </div>
-    </div>
+            </Typography>
+          </Link>
+        </Typography>
+      </Box>
+    </Container>
   );
 };
 

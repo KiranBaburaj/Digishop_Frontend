@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { register } from '../store/slices/authSlice';
+import { Container, Typography, TextField, Button, Box, CircularProgress } from '@mui/material';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -59,6 +60,7 @@ const Register = () => {
       ...prevState,
       [name]: value
     }));
+    
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prevErrors => ({
@@ -103,134 +105,96 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gray-50">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+    <Container component="main" maxWidth="xs" sx={{ mt: 8 }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Typography variant="h5" component="h1" gutterBottom>
           Create your account
-        </h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
+        </Typography>
+        <Typography variant="body2" align="center" sx={{ mb: 2 }}>
           Or{' '}
-          <Link to="/login" className="font-medium text-blue-600 hover:text-blue-500">
-            sign in to your account
+          <Link to="/login" style={{ textDecoration: 'none' }}>
+            <Typography color="primary" component="span">
+              sign in to your account
+            </Typography>
           </Link>
-        </p>
-      </div>
+        </Typography>
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+          {/* Username Field */}
+          <TextField
+            id="username"
+            name="username"
+            label="Username"
+            variant="outlined"
+            required
+            fullWidth
+            margin="normal"
+            error={Boolean(errors.username)}
+            helperText={errors.username}
+            value={formData.username}
+            onChange={handleChange}
+          />
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form className="space-y-6" onSubmit={handleSubmit}>
-            {/* Username Field */}
-            <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-                Username
-              </label>
-              <div className="mt-1">
-                <input
-                  id="username"
-                  name="username"
-                  type="text"
-                  required
-                  className={`appearance-none block w-full px-3 py-2 border ${
-                    errors.username ? 'border-red-500' : 'border-gray-300'
-                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
-                  value={formData.username}
-                  onChange={handleChange}
-                />
-                {errors.username && (
-                  <p className="mt-2 text-sm text-red-600">{errors.username}</p>
-                )}
-              </div>
-            </div>
+          {/* Email Field */}
+          <TextField
+            id="email"
+            name="email"
+            label="Email Address"
+            type="email"
+            variant="outlined"
+            required
+            fullWidth
+            margin="normal"
+            error={Boolean(errors.email)}
+            helperText={errors.email}
+            value={formData.email}
+            onChange={handleChange}
+          />
 
-            {/* Email Field */}
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email address
-              </label>
-              <div className="mt-1">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  required
-                  className={`appearance-none block w-full px-3 py-2 border ${
-                    errors.email ? 'border-red-500' : 'border-gray-300'
-                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
-                  value={formData.email}
-                  onChange={handleChange}
-                />
-                {errors.email && (
-                  <p className="mt-2 text-sm text-red-600">{errors.email}</p>
-                )}
-              </div>
-            </div>
+          {/* Password Field */}
+          <TextField
+            id="password"
+            name="password"
+            label="Password"
+            type="password"
+            variant="outlined"
+            required
+            fullWidth
+            margin="normal"
+            error={Boolean(errors.password)}
+            helperText={errors.password}
+            value={formData.password}
+            onChange={handleChange}
+          />
 
-            {/* Password Field */}
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
-              </label>
-              <div className="mt-1">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  className={`appearance-none block w-full px-3 py-2 border ${
-                    errors.password ? 'border-red-500' : 'border-gray-300'
-                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
-                  value={formData.password}
-                  onChange={handleChange}
-                />
-                {errors.password && (
-                  <p className="mt-2 text-sm text-red-600">{errors.password}</p>
-                )}
-              </div>
-            </div>
+          {/* Confirm Password Field */}
+          <TextField
+            id="confirmPassword"
+            name="confirmPassword"
+            label="Confirm Password"
+            type="password"
+            variant="outlined"
+            required
+            fullWidth
+            margin="normal"
+            error={Boolean(errors.confirmPassword)}
+            helperText={errors.confirmPassword}
+            value={formData.confirmPassword}
+            onChange={handleChange}
+          />
 
-            {/* Confirm Password Field */}
-            <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                Confirm Password
-              </label>
-              <div className="mt-1">
-                <input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type="password"
-                  required
-                  className={`appearance-none block w-full px-3 py-2 border ${
-                    errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
-                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                />
-                {errors.confirmPassword && (
-                  <p className="mt-2 text-sm text-red-600">{errors.confirmPassword}</p>
-                )}
-              </div>
-            </div>
-
-            <div>
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? (
-                  <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                ) : (
-                  'Register'
-                )}
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
+          {/* Submit Button */}
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            sx={{ mt: 3 }}
+          >
+           {loading ? <CircularProgress size={24} /> : 'Register'}
+          </Button>
+        </Box>
+      </Box>
+    </Container>
   );
 };
 

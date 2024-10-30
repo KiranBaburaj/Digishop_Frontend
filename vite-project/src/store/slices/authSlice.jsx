@@ -3,6 +3,7 @@ import axios from 'axios';
 
 const API_URL = 'http://localhost:8000/api';
 
+// Register thunk
 export const register = createAsyncThunk(
   'auth/register',
   async ({ username, email, password }, { rejectWithValue }) => {
@@ -19,6 +20,7 @@ export const register = createAsyncThunk(
   }
 );
 
+// Login thunk
 export const login = createAsyncThunk(
   'auth/login',
   async ({ username, password }, { rejectWithValue }) => {
@@ -27,7 +29,10 @@ export const login = createAsyncThunk(
         username,
         password,
       });
+      // Store token and user details in local storage
       localStorage.setItem('token', response.data.access);
+      localStorage.setItem('userId', response.data.user.id);
+      localStorage.setItem('username', response.data.user.username);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -38,7 +43,10 @@ export const login = createAsyncThunk(
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    user: null,
+    user: {
+      id: localStorage.getItem('userId'),
+      username: localStorage.getItem('username'),
+    },
     token: localStorage.getItem('token'),
     loading: false,
     error: null,
@@ -48,6 +56,8 @@ const authSlice = createSlice({
       state.user = null;
       state.token = null;
       localStorage.removeItem('token');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('username');
     },
   },
   extraReducers: (builder) => {

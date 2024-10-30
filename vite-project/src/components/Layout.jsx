@@ -2,6 +2,7 @@ import React from 'react';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../store/slices/authSlice';
+import { AppBar, Toolbar, Typography, Button, Container } from '@mui/material';
 
 const Layout = () => {
   const { token } = useSelector((state) => state.auth);
@@ -10,75 +11,51 @@ const Layout = () => {
 
   const handleLogout = () => {
     dispatch(logout());
-    navigate('/login');
+    navigate('/home');
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <nav className="bg-white shadow-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex">
-              <Link to="/" className="flex-shrink-0 flex items-center">
-                <span className="text-xl font-bold text-gray-800">Shop</span>
-              </Link>
-              <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-                <Link
-                  to="/products"
-                  className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Products
-                </Link>
-                {token && (
-                  <>
-                    <Link
-                      to="/cart"
-                      className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-                    >
-                      Cart
-                    </Link>
-                    <Link
-                      to="/manage-products"
-                      className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-                    >
-                      Manage Products
-                    </Link>
-                  </>
-                )}
-              </div>
-            </div>
-            <div className="flex items-center">
+    <div className="min-h-screen bg-gray-100 flex flex-col">
+      <AppBar position="static" sx={{ background: 'linear-gradient(to right, #3f51b5, #2196f3)' }}>
+        <Container maxWidth="lg">
+          <Toolbar>
+            <Typography variant="h6" component={Link} to="/home" sx={{ flexGrow: 1, color: 'white', textDecoration: 'none' }}>
+              Digishop
+            </Typography>
+            <div>
+              <Button component={Link} to="/products" color="inherit">Products</Button>
+              {token && (
+                <>
+                  <Button component={Link} to="/cart" color="inherit">Cart</Button>
+                  <Button component={Link} to="/manage-products" color="inherit">Manage Products</Button>
+                </>
+              )}
               {token ? (
-                <button
-                  onClick={handleLogout}
-                  className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Logout
-                </button>
+                <Button onClick={handleLogout} color="inherit">Logout</Button>
               ) : (
-                <div className="space-x-4">
-                  <Link
-                    to="/login"
-                    className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Login
-                  </Link>
-                  <Link
-                    to="/register"
-                    className="bg-blue-600 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700"
-                  >
-                    Register
-                  </Link>
-                </div>
+                <>
+                  <Button component={Link} to="/login" color="inherit">Login</Button>
+                  <Button component={Link} to="/register" variant="contained" color="secondary">Register</Button>
+                </>
               )}
             </div>
-          </div>
-        </div>
-      </nav>
+          </Toolbar>
+        </Container>
+      </AppBar>
 
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      <main className="flex-grow max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <Outlet />
       </main>
+
+      <footer className="bg-white shadow-md mt-auto">
+        <div className="max-w-7xl mx-auto px-4 py-4 text-center">
+          <p className="text-gray-600 text-sm">© 2023 Digishop. All rights reserved.</p>
+          <div className="mt-2 space-x-4">
+            <Link to="/terms" className="text-gray-600 hover:text-gray-900">Terms of Service</Link>
+            <Link to="/privacy" className="text-gray-600 hover:text-gray-900">Privacy Policy</Link>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts } from '../store/slices/productsSlice';
 import { Link } from 'react-router-dom'; // Import Link for navigation
+import { Grid, Paper, Typography, CircularProgress, Box } from '@mui/material';
 
 const Products = () => {
   const dispatch = useDispatch();
@@ -11,28 +12,39 @@ const Products = () => {
     dispatch(fetchProducts());
   }, [dispatch]);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
+  if (loading) return <CircularProgress />; // Show loading spinner
+  if (error) return <Typography color="error">{error}</Typography>; // Show error message
 
   return (
-    <div>
+    <Grid container spacing={3}>
       {items.map((product) => (
-        <div key={product.id} className="product">
-          <h2>{product.name}</h2>
-          <p>{product.description}</p>
-          <p>${product.price}</p>
-          {product.image && (
-            <img
-              src={product.image}
-              alt={product.name}
-              className="product-image"
-              style={{ maxWidth: '200px', maxHeight: '200px', objectFit: 'cover' }} // Adjust styling as needed
-            />
-          )}
-          <Link to={`/products/${product.id}`}>View Details</Link> {/* Link to Product Detail */}
-        </div>
+        <Grid item xs={12} sm={6} md={4} key={product.id}>
+          <Paper elevation={3} sx={{ padding: 2 }}>
+            <Typography variant="h6">{product.name}</Typography>
+            <Typography variant="body2">{product.description}</Typography>
+            <Typography variant="h6">${product.price}</Typography>
+            {product.image && (
+              <Box
+                component="img"
+                src={product.image}
+                alt={product.name}
+                sx={{
+                  maxWidth: '100%',
+                  maxHeight: '200px',
+                  objectFit: 'cover',
+                  marginTop: 1,
+                }}
+              />
+            )}
+            <Link to={`/products/${product.id}`} style={{ textDecoration: 'none' }}>
+              <Typography variant="body2" color="primary" sx={{ marginTop: 1 }}>
+                View Details
+              </Typography>
+            </Link>
+          </Paper>
+        </Grid>
       ))}
-    </div>
+    </Grid>
   );
 };
 

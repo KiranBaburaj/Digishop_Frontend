@@ -1,32 +1,32 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
-import axios from 'axios';
+import { Container, Typography, Grid, Paper } from '@mui/material';
 import Products from './Products';
 
 const HomePage = () => {
-  const [products, setProducts] = useState([]);
-  const { user } = useSelector((state) => state.auth);
-
-
+  // Get username either from Redux state or localStorage
+  const username = useSelector((state) => state.auth.user?.username) || localStorage.getItem('username');
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Conditional rendering based on user state */}
-        {user ? (
-          <>
-            <h1 className="text-2xl font-bold text-center mb-4">Welcome, {user.username}!</h1>
-            <h2 className="text-xl font-semibold text-center mb-6">Available Products</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-             
-            </div>
-          </>
-        ) : (
-          <h1 className="text-center text-xl">Please log in to see your products.</h1>
-        )}
-        <Products/>
-      </div>
-    </div>
+    <Container maxWidth="lg" sx={{ minHeight: '100vh', backgroundColor: '#f8f9fa', py: 4 }}>
+      {/* Conditional rendering based on username */}
+      {username ? (
+        <>
+          <Typography variant="h4" align="center" gutterBottom>
+            Welcome, {username}!
+          </Typography>
+          <Typography variant="h5" align="center" gutterBottom>
+            Available Products
+          </Typography>
+        
+        </>
+      ) : (
+        <Typography variant="h5" align="center">
+          Please log in to see your products.
+        </Typography>
+      )}
+      <Products />
+    </Container>
   );
 };
 
