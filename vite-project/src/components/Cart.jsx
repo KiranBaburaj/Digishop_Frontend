@@ -1,7 +1,7 @@
-// Cart.js
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCart } from '../store/slices/cartSlice';
+import { Container, Typography, List, ListItem, ListItemText, Button, CircularProgress } from '@mui/material';
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -12,35 +12,65 @@ const Cart = () => {
   }, [dispatch]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <Container>
+        <CircularProgress />
+      </Container>
+    );
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return (
+      <Container>
+        <Typography variant="h6" color="error">Error: {error}</Typography>
+      </Container>
+    );
   }
 
-  if (!items || items.length === 0) { // Add fallback check
-    return <div>Your cart is empty.</div>;
+  if (!items || items.length === 0) {
+    return (
+      <Container>
+        <Typography variant="h6">Your cart is empty.</Typography>
+      </Container>
+    );
   }
 
-  const totalPrice = items.reduce((total, item) => total + item.quantity * parseFloat(item.product.price), 0);
+  // Aggregate items by product ID
+  const aggregatedItems = items.reduce((acc, item) => {
+    const existingItem = acc.find(i => i.product.id === item.product.id);
+    if (existingItem) {
+      existingItem.quantity += item.quantity; // Aggregate quantity
+    } else {
+      acc.push({ ...item }); // Add new item
+    }
+    return acc;
+  }, []);
+
+  const totalPrice = aggregatedItems.reduce((total, item) => total + item.quantity * parseFloat(item.product.price), 0);
 
   return (
-    <div>
-      <h1>Your Cart</h1>
-      <ul>
-        {items.map((item) => (
-          <li key={item.id}>
-            <div>
-              <h2>{item.product.name}</h2>
-              <p>Quantity: {item.quantity}</p>
-              <p>Price: ${item.product.price}</p>
-            </div>
-          </li>
+    <Container>
+      <Typography variant="h4" gutterBottom>Your Cart</Typography>
+      <List>
+        {aggregatedItems.map((item) => (
+          <ListItem key={item.id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <ListItemText
+              primary={item.product.name}
+              secondary={`Quantity: ${item.quantity} - Price: $${(item.quantity * item.product.price).toFixed(2)}`}
+            />
+            <Button variant="contained" color="primary" onClick={() => {/* Handle increase quantity */}}>
+              +
+            </Button>
+            <Button variant="contained" color="secondary" onClick={() => {/* Handle remove item */}}>
+              Remove
+            </Button>
+          </ListItem>
         ))}
-      </ul>
-      <h2>Total Price: ${totalPrice.toFixed(2)}</h2>
-    </div>
+      </List>
+      <Typography variant="h5" sx={{ marginTop: '16px' }}>
+        Total Price: ${totalPrice.toFixed(2)}
+      </Typography>
+    </Container>
   );
 };
 
