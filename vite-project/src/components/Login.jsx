@@ -29,7 +29,7 @@ const Login = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs" sx={{ mt: 8 }}>
+    <Container component="main" sx={{ mt: 8, maxWidth: 'sm', width: '100%' }}> {/* Set maxWidth to 'sm' */}
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <Typography variant="h5" component="h1" gutterBottom>
           Sign in to your account

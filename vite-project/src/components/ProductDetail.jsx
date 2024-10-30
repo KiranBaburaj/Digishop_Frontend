@@ -2,7 +2,9 @@ import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProduct } from '../store/slices/productsSlice';
+import { addToCart } from '../store/slices/cartSlice'; // Import the addToCart action
 import { Container, Typography, Paper, Box, Button, CircularProgress } from '@mui/material';
+import Cart from './Cart';
 
 const ProductDetail = () => {
   const { id } = useParams(); // Get the product ID from the URL
@@ -12,6 +14,11 @@ const ProductDetail = () => {
   useEffect(() => {
     dispatch(fetchProduct(id)); // Fetch product details using the ID
   }, [dispatch, id]);
+
+  // Function to handle adding the product to the cart
+  const handleAddToCart = () => {
+    dispatch(addToCart(product)); // Dispatch addToCart action with the product details
+  };
 
   if (loading) return <CircularProgress />; // Show loading spinner
   if (error) return <Typography color="error">{error}</Typography>; // Show error message
@@ -44,11 +51,17 @@ const ProductDetail = () => {
             }}
           />
         )}
-        <Button variant="contained" color="primary" fullWidth>
+        <Button
+          variant="contained"
+          color="primary"
+          fullWidth
+          onClick={handleAddToCart} // Add onClick handler
+        >
           Add to Cart
         </Button>
-      </Paper>
+      </Paper> <Cart/>
     </Container>
+   
   );
 };
 

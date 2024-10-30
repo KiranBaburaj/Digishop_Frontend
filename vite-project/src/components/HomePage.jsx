@@ -8,7 +8,7 @@ const HomePage = () => {
   const username = useSelector((state) => state.auth.user?.username) || localStorage.getItem('username');
 
   return (
-    <Container maxWidth="lg" sx={{ minHeight: '100vh', backgroundColor: '#f8f9fa', py: 4 }}>
+    <Container  sx={{ minHeight: '100vh', backgroundColor: '#f8f9fa', py: 4 }}>
       {/* Conditional rendering based on username */}
       {username ? (
         <>

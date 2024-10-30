@@ -15,9 +15,9 @@ const Layout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col">
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <AppBar position="static" sx={{ background: 'linear-gradient(to right, #3f51b5, #2196f3)' }}>
-        <Container maxWidth="lg">
+        <Container sx={{ width: '100%', maxWidth: 'none' }}> {/* Change here */}
           <Toolbar>
             <Typography variant="h6" component={Link} to="/home" sx={{ flexGrow: 1, color: 'white', textDecoration: 'none' }}>
               Digishop
@@ -43,18 +43,22 @@ const Layout = () => {
         </Container>
       </AppBar>
 
-      <main className="flex-grow max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <Outlet />
+      <main style={{ flexGrow: 1 }}>
+        <Container sx={{ py: 6, width: '100%', maxWidth: 'none' }}> {/* Change here */}
+          <Outlet />
+        </Container>
       </main>
 
-      <footer className="bg-white shadow-md mt-auto">
-        <div className="max-w-7xl mx-auto px-4 py-4 text-center">
-          <p className="text-gray-600 text-sm">© 2023 Digishop. All rights reserved.</p>
-          <div className="mt-2 space-x-4">
-            <Link to="/terms" className="text-gray-600 hover:text-gray-900">Terms of Service</Link>
-            <Link to="/privacy" className="text-gray-600 hover:text-gray-900">Privacy Policy</Link>
+      <footer style={{ backgroundColor: 'white', boxShadow: '0 2px 4px rgba(0,0,0,0.1)', marginTop: 'auto' }}>
+        <Container sx={{ py: 4, textAlign: 'center', width: '100%', maxWidth: 'none' }}> {/* Change here */}
+          <Typography variant="body2" color="textSecondary">
+            © 2024 Digishop. All rights reserved.
+          </Typography>
+          <div style={{ marginTop: '8px' }}>
+            <Link to="/terms" style={{ marginRight: '16px', color: '#3f51b5' }}>Terms of Service</Link>
+            <Link to="/privacy" style={{ color: '#3f51b5' }}>Privacy Policy</Link>
           </div>
-        </div>
+        </Container>
       </footer>
     </div>
   );

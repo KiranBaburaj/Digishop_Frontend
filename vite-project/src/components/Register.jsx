@@ -105,7 +105,7 @@ const Register = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs" sx={{ mt: 8 }}>
+    <Container component="main"  sx={{ mt: 8 }}>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <Typography variant="h5" component="h1" gutterBottom>
           Create your account
